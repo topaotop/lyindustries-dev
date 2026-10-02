@@ -56,9 +56,9 @@ page.php
 ```
 lyindustries-dev/
 ├── *.php            # ทุกหน้าอยู่ที่ root (ไม่มี subfolder สำหรับ code)
-├── img/             # รูปสินค้า/หมวด (.png ส่วนใหญ่ ถูก gitignore), .jpg ของ index
-├── media/           # วิดีโอ about (*.mp4 — gitignored)
-│   └── header/      # วิดีโอ hero carousel ของ index (*.mp4 — gitignored)
+├── img/             # รูปสินค้า/หมวด (.png) และ .jpg ของ index
+├── media/           # วิดีโอ about (*.mp4)
+│   └── header/      # วิดีโอ hero carousel ของ index (*.mp4)
 ├── cert/            # รูปใบรับรอง — โหลดอัตโนมัติด้วย glob
 ├── partners/        # logopartners.jpg
 ├── CLAUDE.md
@@ -94,7 +94,7 @@ lyindustries-dev/
 ### Production
 - **ยังไม่มีข้อมูลใน repo** (ไม่มี deploy script / config / CI) — ต้องสอบถามเจ้าของโปรเจกต์ก่อนสรุปเรื่อง host, OS, วิธี deploy
 - ข้อควรระวังเมื่อ deploy:
-  - `.gitignore` ตัด `*.png` และ `*.mp4` ออก → **deploy จาก git อย่างเดียวจะขาดรูปสินค้าและวิดีโอเกือบทั้งหมด** ต้อง copy asset แยก
+  - รูปและวิดีโอทั้งหมดอยู่ใน git แล้ว (ไม่ใช้ Git LFS) → deploy จาก git ได้ครบ แต่ asset รวม ~230 MB ทำให้ clone/upload ครั้งแรกช้า
   - ถ้า server เป็น Linux ชื่อไฟล์ case-sensitive (เช่น ลิงก์ `CROCHET.php` จะ 404)
   - Tailwind Play CDN ไม่แนะนำสำหรับ production
 
@@ -106,8 +106,8 @@ lyindustries-dev/
    - ถ้าต้องอัปเดต ให้แก้ใน commit เดียวกับ source code
 2. **อย่าแก้ source code เกินกว่าที่ได้รับมอบหมาย** — ถ้าเจอ bug อื่นระหว่างทาง ให้บันทึกใน PROJECT_STATUS.md แล้วแจ้งผู้ใช้ ไม่แก้เอง
 3. **ห้ามเพิ่ม framework / build tool / package manager / database** (npm, Composer, Laravel, Tailwind build ฯลฯ) โดยไม่ได้รับอนุมัติ
-4. **ห้ามลบหรือเปลี่ยนชื่อไฟล์ใน `img/`, `media/`, `cert/`, `partners/`** — asset ส่วนใหญ่ไม่อยู่ใน git (gitignored) ลบแล้วกู้คืนจาก git ไม่ได้
-5. **ห้ามแก้ `.gitignore` ให้ track `*.png`/`*.mp4`** โดยไม่ถามก่อน (ไฟล์วิดีโอใหญ่)
+4. **ห้ามลบหรือเปลี่ยนชื่อไฟล์ใน `img/`, `media/`, `cert/`, `partners/`** โดยไม่ได้รับอนุญาต — มีโค้ดอ้างอิงด้วยชื่อไฟล์ตรงตัว และ hero video / cert โหลดทุกไฟล์ในโฟลเดอร์ด้วย glob
+5. **Asset อยู่ใน git แบบปกติ (ไม่ใช้ LFS)** — ห้าม ignore `*.png`/`*.mp4` กลับ หรือเปลี่ยนไปใช้ LFS โดยไม่ถามก่อน; ไฟล์เดียวห้ามเกิน 100 MB (ลิมิต GitHub) และควรต่ำกว่า 50 MB
 6. ระวัง **ตัวพิมพ์เล็ก/ใหญ่ของชื่อไฟล์** ให้ตรงกับไฟล์จริงเสมอ (dev เป็น Windows ซึ่งไม่ case-sensitive จึงซ่อน bug ได้)
 7. ข้อมูลบริษัท (ที่อยู่, เบอร์โทร, อีเมล, ชื่อแบรนด์ลูกค้า, ใบรับรอง) **ห้ามแต่งเติมเอง** — ใช้เฉพาะที่มีในโค้ดหรือที่ผู้ใช้ให้มา
 8. แก้ header/footer กระทบทุกหน้า — ตรวจทุกหน้าหลังแก้

@@ -20,6 +20,7 @@
 - [x] ตั้ง git repo + remote GitHub (`topaotop/lyindustries-dev`)
 - [x] **แก้ bug #1** (2026-10-02) — สร้างส่วน certificate lightbox + script ใน `index.php` ที่หายไปขึ้นใหม่ (ไม่มีไฟล์ต้นฉบับ จึงเขียนใหม่ให้เข้ากับฟังก์ชันที่เหลืออยู่)
 - [x] **แก้ bug #2** (2026-10-02) — ลิงก์ `CROCHET.php` → `crochet.php` และตรวจ path ทุกไฟล์แบบ case-sensitive แล้ว ไม่พบจุดอื่นที่ไม่ตรง
+- [x] **แก้ bug #3** (2026-10-02) — เอา `*.png`/`*.mp4` ออกจาก `.gitignore` และ commit รูป/วิดีโอทั้งหมดเข้า git
 
 ## 🔄 งานที่กำลังทำ
 
@@ -37,7 +38,7 @@
 |---|---|---|---|
 | 1 | ✅ แก้แล้ว 2026-10-02 (ผู้ใช้ทดสอบผ่าน) | `index.php:272` | ~~ไฟล์เสียหาย (truncated/merged) — lightbox markup, `<script>`, `certList`, `currentCertIndex`, `scrollCert()` หายไป~~ → เขียนใหม่: ปุ่ม prev/next, `<img id="lightboxImg">`, คลิกพื้นหลังเพื่อปิด, `certList` จาก `json_encode($certFiles)`, `scrollCert()` เลื่อนทีละ 1 การ์ด |
 | 2 | ✅ แก้แล้ว 2026-10-02 | `products_detail.php:51` | ~~ลิงก์ไป `CROCHET.php` แต่ไฟล์จริงคือ `crochet.php` → 404 บน Linux~~ → เปลี่ยนเป็น `crochet.php`; ตรวจ href/src/path ทุกไฟล์แบบ case-sensitive แล้วตรงทั้งหมด |
-| 3 | 🟠 กลาง | `.gitignore` | ignore `*.png` และ `*.mp4` → รูปสินค้าเกือบทั้งหมด, `cert/OEKO.png`, `img/beemmc.png` และวิดีโอทั้งหมดไม่อยู่ใน git — clone ใหม่แล้วเว็บจะไม่มีรูป/วิดีโอ |
+| 3 | ✅ แก้แล้ว 2026-10-02 | `.gitignore` | ~~ignore `*.png` และ `*.mp4` → รูป/วิดีโอไม่อยู่ใน git~~ → ลบออกจาก `.gitignore` และ commit asset 42 ไฟล์ (~231 MB) แบบไม่ลดขนาด ไม่ใช้ LFS |
 | 4 | 🟡 ต่ำ | `contact.php`, `shop.php`, `innovation.php` | เขียน `<!DOCTYPE>/<html>/<head>/<body>` เองแล้ว include `header.php` ที่สร้างซ้ำอีกชุด และปิด `</body></html>` ซ้ำกับ `footer.php` → HTML ไม่ valid, `<title>` เฉพาะหน้าซ้อนกับของ header |
 | 5 | 🟡 ต่ำ | `header.php:73` | ลิงก์ "Innovation" ไม่มี active state เหมือนเมนูอื่น; หน้าหมวดสินค้าย่อยก็ไม่ highlight "Products Detail" |
 | 6 | 🟡 ต่ำ | `footer.php:44` | ลิงก์ Facebook เป็น `href="#"` |
@@ -50,7 +51,7 @@
 
 1. ~~แก้ bug #1~~ ✅ เสร็จแล้ว
 2. ~~แก้ bug #2 และตรวจทุกลิงก์/path ให้ตรงตัวพิมพ์~~ ✅ เสร็จแล้ว
-3. ตัดสินใจวิธีจัดการ asset (png/mp4) — Git LFS, เก็บแยก, หรือ track ใน git (ดู Technical Decisions)
+3. ~~ตัดสินใจวิธีจัดการ asset~~ ✅ เก็บใน git ปกติ — (พิจารณาภายหลัง) ลดขนาดรูปเป็น WebP / บีบอัดวิดีโอ เพื่อความเร็วเว็บ: รูป PNG 3–10 MB/รูป, `PASSION (1).mp4` 28.8 MB
 4. ปรับ `contact.php`, `shop.php`, `innovation.php` ให้ใช้โครง header/footer แบบเดียวกับหน้าอื่น
 5. ทำ backend ฟอร์มติดต่อ (ส่งอีเมล / บันทึก) + validation + กัน spam
 6. ใส่คำอธิบายสินค้าจริงแทน placeholder และแก้ typo
@@ -68,7 +69,7 @@
 | ข้อมูลสินค้าเป็น PHP array ในแต่ละหน้า (ไม่มี DB) | แก้เนื้อหาง่าย แต่ข้อมูลซ้ำระหว่าง `index.php` กับ `products_detail.php` |
 | Hero video และ certificate โหลดด้วย `glob()` จากโฟลเดอร์ | เพิ่ม/ลบเนื้อหาได้แค่วางไฟล์ ไม่ต้องแก้โค้ด; `PASSION (1).mp4` ถูกบังคับให้เล่นก่อน |
 | `description` ในหน้าหมวดสินค้าไม่ escape | เพื่อรองรับ `<br>` — ปลอดภัยเพราะข้อมูล hardcoded เท่านั้น ห้ามรับ input จากผู้ใช้เข้าฟิลด์นี้ |
-| ไม่ track `*.png` / `*.mp4` ใน git | ลดขนาด repo — แต่ทำให้ asset ไม่ได้ backup และ deploy จาก git ไม่ครบ (**ยังต้องตัดสินใจ**) |
+| Track `*.png` / `*.mp4` ใน git แบบปกติ ไม่ใช้ LFS และไม่ลดขนาด (2026-10-02, ผู้ใช้ตัดสินใจ) | asset ได้ backup และ deploy จาก git ครบ, ไม่ต้องตั้งค่า LFS — แลกกับ repo ใหญ่ (~230 MB) และทุกการแก้รูป/วิดีโอจะเพิ่มขนาด history ถาวร |
 | Cache busting แบบ query string (`img/77.png?v=new`) | ใช้ครั้งเดียวใน `needle_loom.php` เพื่อบังคับโหลดรูปใหม่ |
 
 ## ❓ คำถามที่รอคำตอบจากเจ้าของโปรเจกต์
