@@ -48,7 +48,7 @@ $products = [
                 $linkPath = 'index.php';
                 $titleLower = strtolower($product['title']);
                 if ($titleLower === 'needle loom') $linkPath = 'needle_loom.php';
-                elseif ($titleLower === 'crochet') $linkPath = 'CROCHET.php';
+                elseif ($titleLower === 'crochet') $linkPath = 'crochet.php';
                 elseif ($titleLower === 'raschel') $linkPath = 'raschel.php';
                 elseif ($titleLower === 'braiding') $linkPath = 'braiding.php';
                 elseif ($titleLower === 'finishing') $linkPath = 'finishing.php';

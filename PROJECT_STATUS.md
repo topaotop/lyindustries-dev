@@ -19,6 +19,7 @@
 - [x] Shop (`shop.php`): หน้า placeholder "INCOMING"
 - [x] ตั้ง git repo + remote GitHub (`topaotop/lyindustries-dev`)
 - [x] **แก้ bug #1** (2026-10-02) — สร้างส่วน certificate lightbox + script ใน `index.php` ที่หายไปขึ้นใหม่ (ไม่มีไฟล์ต้นฉบับ จึงเขียนใหม่ให้เข้ากับฟังก์ชันที่เหลืออยู่)
+- [x] **แก้ bug #2** (2026-10-02) — ลิงก์ `CROCHET.php` → `crochet.php` และตรวจ path ทุกไฟล์แบบ case-sensitive แล้ว ไม่พบจุดอื่นที่ไม่ตรง
 
 ## 🔄 งานที่กำลังทำ
 
@@ -35,7 +36,7 @@
 | # | ความรุนแรง | ไฟล์ | ปัญหา |
 |---|---|---|---|
 | 1 | ✅ แก้แล้ว 2026-10-02 (ผู้ใช้ทดสอบผ่าน) | `index.php:272` | ~~ไฟล์เสียหาย (truncated/merged) — lightbox markup, `<script>`, `certList`, `currentCertIndex`, `scrollCert()` หายไป~~ → เขียนใหม่: ปุ่ม prev/next, `<img id="lightboxImg">`, คลิกพื้นหลังเพื่อปิด, `certList` จาก `json_encode($certFiles)`, `scrollCert()` เลื่อนทีละ 1 การ์ด |
-| 2 | 🟠 กลาง | `products_detail.php:51` | ลิงก์ไป `CROCHET.php` แต่ไฟล์จริงคือ `crochet.php` → ใช้ได้บน Windows แต่ **404 บน Linux server** |
+| 2 | ✅ แก้แล้ว 2026-10-02 | `products_detail.php:51` | ~~ลิงก์ไป `CROCHET.php` แต่ไฟล์จริงคือ `crochet.php` → 404 บน Linux~~ → เปลี่ยนเป็น `crochet.php`; ตรวจ href/src/path ทุกไฟล์แบบ case-sensitive แล้วตรงทั้งหมด |
 | 3 | 🟠 กลาง | `.gitignore` | ignore `*.png` และ `*.mp4` → รูปสินค้าเกือบทั้งหมด, `cert/OEKO.png`, `img/beemmc.png` และวิดีโอทั้งหมดไม่อยู่ใน git — clone ใหม่แล้วเว็บจะไม่มีรูป/วิดีโอ |
 | 4 | 🟡 ต่ำ | `contact.php`, `shop.php`, `innovation.php` | เขียน `<!DOCTYPE>/<html>/<head>/<body>` เองแล้ว include `header.php` ที่สร้างซ้ำอีกชุด และปิด `</body></html>` ซ้ำกับ `footer.php` → HTML ไม่ valid, `<title>` เฉพาะหน้าซ้อนกับของ header |
 | 5 | 🟡 ต่ำ | `header.php:73` | ลิงก์ "Innovation" ไม่มี active state เหมือนเมนูอื่น; หน้าหมวดสินค้าย่อยก็ไม่ highlight "Products Detail" |
@@ -48,7 +49,7 @@
 ## 📋 งานที่ต้องทำต่อ (Backlog)
 
 1. ~~แก้ bug #1~~ ✅ เสร็จแล้ว
-2. แก้ bug #2 (ชื่อไฟล์ case) และตรวจทุกลิงก์/path ให้ตรงตัวพิมพ์
+2. ~~แก้ bug #2 และตรวจทุกลิงก์/path ให้ตรงตัวพิมพ์~~ ✅ เสร็จแล้ว
 3. ตัดสินใจวิธีจัดการ asset (png/mp4) — Git LFS, เก็บแยก, หรือ track ใน git (ดู Technical Decisions)
 4. ปรับ `contact.php`, `shop.php`, `innovation.php` ให้ใช้โครง header/footer แบบเดียวกับหน้าอื่น
 5. ทำ backend ฟอร์มติดต่อ (ส่งอีเมล / บันทึก) + validation + กัน spam
