@@ -34,7 +34,7 @@
 
 | # | ความรุนแรง | ไฟล์ | ปัญหา |
 |---|---|---|---|
-| 1 | ✅ แก้แล้ว 2026-10-02 | `index.php:272` | ~~ไฟล์เสียหาย (truncated/merged) — lightbox markup, `<script>`, `certList`, `currentCertIndex`, `scrollCert()` หายไป~~ → เขียนใหม่: ปุ่ม prev/next, `<img id="lightboxImg">`, คลิกพื้นหลังเพื่อปิด, `certList` จาก `json_encode($certFiles)`, `scrollCert()` เลื่อนทีละ 1 การ์ด |
+| 1 | ✅ แก้แล้ว 2026-10-02 (ผู้ใช้ทดสอบผ่าน) | `index.php:272` | ~~ไฟล์เสียหาย (truncated/merged) — lightbox markup, `<script>`, `certList`, `currentCertIndex`, `scrollCert()` หายไป~~ → เขียนใหม่: ปุ่ม prev/next, `<img id="lightboxImg">`, คลิกพื้นหลังเพื่อปิด, `certList` จาก `json_encode($certFiles)`, `scrollCert()` เลื่อนทีละ 1 การ์ด |
 | 2 | 🟠 กลาง | `products_detail.php:51` | ลิงก์ไป `CROCHET.php` แต่ไฟล์จริงคือ `crochet.php` → ใช้ได้บน Windows แต่ **404 บน Linux server** |
 | 3 | 🟠 กลาง | `.gitignore` | ignore `*.png` และ `*.mp4` → รูปสินค้าเกือบทั้งหมด, `cert/OEKO.png`, `img/beemmc.png` และวิดีโอทั้งหมดไม่อยู่ใน git — clone ใหม่แล้วเว็บจะไม่มีรูป/วิดีโอ |
 | 4 | 🟡 ต่ำ | `contact.php`, `shop.php`, `innovation.php` | เขียน `<!DOCTYPE>/<html>/<head>/<body>` เองแล้ว include `header.php` ที่สร้างซ้ำอีกชุด และปิด `</body></html>` ซ้ำกับ `footer.php` → HTML ไม่ valid, `<title>` เฉพาะหน้าซ้อนกับของ header |
