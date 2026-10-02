@@ -267,9 +267,40 @@ $products = [
         </button>
 
         <!-- คอนเทนเนอร์แสดงภาพและปุ่มเลื่อน -->
-        <div class="relative w-full h-full flex items-center justify-between px-4 sm:px-10">
+        <!-- คลิกพื้นที่ว่างรอบรูปเพื่อปิด (ปุ่มเลื่อนใช้ stopPropagation กันไม่ให้ปิด) -->
+        <div class="relative w-full h-full flex items-center justify-between px-4 sm:px-10" onclick="closeLightbox()">
             <button onclick="prevLightboxCert(event)" class="text-white hover:text-gray-400 focus:outline-none p-4 z-[101]">
-                <svg xmlns="h                container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 md:h-14 md:w-14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+
+            <!-- รูปใบรับรองขนาดใหญ่ -->
+            <img id="lightboxImg" src="" alt="Certificate" class="max-w-[80vw] max-h-[85vh] object-contain" onclick="event.stopPropagation()">
+
+            <button onclick="nextLightboxCert(event)" class="text-white hover:text-gray-400 focus:outline-none p-4 z-[101]">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 md:h-14 md:w-14" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Script สำหรับ Certificate Carousel และ Lightbox -->
+    <script>
+        // รายการไฟล์ใบรับรองจากโฟลเดอร์ cert/ (ลำดับเดียวกับ carousel)
+        const certList = <?= json_encode(array_values($certFiles)); ?>;
+        let currentCertIndex = 0;
+
+        // เลื่อน carousel ทีละ 1 ใบ (ความกว้างการ์ด + gap)
+        function scrollCert(direction) {
+            const container = document.getElementById('certContainer');
+            const card = container.firstElementChild;
+            const gap = parseFloat(getComputedStyle(container).columnGap) || 0;
+            const scrollAmount = card ? card.offsetWidth + gap : container.clientWidth;
+
+            if (direction === 'left') {
+                container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
             } else {
                 container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
             }
